@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useCallback } from 'react'
 const UIContext = createContext(null)
 
 export const UIProvider = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeNavItem, setActiveNavItem] = useState('feed')
 
   const openSidebar = useCallback(() => setSidebarOpen(true), [])

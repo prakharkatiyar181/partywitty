@@ -1,135 +1,164 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Flame, Bookmark, BookmarkCheck, BadgeCheck, Users, Plus } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { BadgeCheck, Flame } from 'lucide-react'
 
 const DiscoverCard = ({
   name = 'Zoe Miller, 22',
   mutualMates = 4,
-  vibe = 'Matches your vibe',
   tags = ['Bollywood Nights', 'Chill Crowd', 'Party Regular'],
   imageSrc,
-  colorIndex = 0,
-  delay = 0,
+  onSwipe,
+  onGoTonight,
+  isTop,
+  forceSwipe,
 }) => {
-  const [bookmarked, setBookmarked] = useState(false)
   const [mateAdded, setMateAdded] = useState(false)
+  const x = useMotionValue(0)
+  const navigate = useNavigate()
 
-  const gradients = [
-    'from-purple-600 via-pink-500 to-orange-400',
-    'from-blue-600 via-purple-500 to-pink-400',
-    'from-green-500 via-teal-400 to-blue-500',
-  ]
+  // Programmatically swipe when buttons are clicked
+  useEffect(() => {
+    if (isTop && forceSwipe) {
+      if (forceSwipe === 'right') {
+        animate(x, 500, { duration: 0.4, ease: 'easeOut' })
+      } else if (forceSwipe === 'left') {
+        animate(x, -500, { duration: 0.4, ease: 'easeOut' })
+      }
+    }
+  }, [forceSwipe, isTop, x])
+
+  // Rotate the card as it drags
+  const rotate = useTransform(x, [-200, 200], [-15, 15])
+  
+  // Opacity overlays for Like/Nope indicators
+  const likeOpacity = useTransform(x, [20, 100], [0, 1])
+  const nopeOpacity = useTransform(x, [-20, -100], [0, 1])
+
+  const handleDragEnd = (event, info) => {
+    const offset = info.offset.x
+    const velocity = info.velocity.x
+
+    if (offset > 100 || velocity > 500) {
+      if (onSwipe) onSwipe('right')
+    } else if (offset < -100 || velocity < -500) {
+      if (onSwipe) onSwipe('left')
+    }
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.96, y: 12 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.45, delay, ease: 'easeOut' }}
-      className="relative rounded-[28px] overflow-hidden w-full glass-card-sm"
+      className="absolute top-0 left-0 w-full"
+      style={{ x, rotate, zIndex: isTop ? 10 : 0 }}
+      drag={isTop ? "x" : false}
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 1.02 }}
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ x: x.get() > 0 ? 500 : -500, opacity: 0, transition: { duration: 0.2 } }}
     >
-      {/* Profile Image */}
-      <div className="relative h-52 overflow-hidden">
-        {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={name}
-            className="w-full h-full object-cover object-top"
-          />
-        ) : (
-          <div className={`w-full h-full bg-gradient-to-br ${gradients[colorIndex % gradients.length]}`} />
+      <div className="relative w-full max-w-[420px] mx-auto">
+        
+        {/* Stacked Cards Background Effect (only show on top card to simulate depth) */}
+        {isTop && (
+          <>
+            <div className="absolute -top-5 left-[10%] right-[10%] h-10 bg-[#8B7F92]/20 backdrop-blur-md rounded-t-[30px] border-t border-white/10" />
+            <div className="absolute -top-2.5 left-[5%] right-[5%] h-10 bg-[#8B7F92]/40 backdrop-blur-md rounded-t-[35px] border-t border-white/20" />
+          </>
         )}
 
-        {/* Gradient overlay bottom */}
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to top, rgba(8,4,18,0.95) 0%, rgba(8,4,18,0.2) 50%, transparent 100%)' }}
-        />
+        {/* Main Card Container */}
+        <div 
+          className="relative w-full rounded-[40px] flex flex-col overflow-hidden bg-black cursor-grab active:cursor-grabbing"
+          style={{ height: '620px' }} // Height just for the image card
+        >
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt={name}
+              className="w-full h-full object-cover object-center pointer-events-none"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 pointer-events-none" />
+          )}
 
-        {/* Vibe badge — top right */}
-        <div className="absolute top-3 right-3">
+          {/* Swipe Indicators */}
+          <motion.div style={{ opacity: likeOpacity }} className="absolute top-12 left-8 border-4 border-green-500 rounded-xl px-4 py-1 z-50 rotate-[-15deg]">
+            <span className="text-green-500 font-bold text-3xl tracking-widest uppercase drop-shadow-md">Like</span>
+          </motion.div>
+          <motion.div style={{ opacity: nopeOpacity }} className="absolute top-12 right-8 border-4 border-red-500 rounded-xl px-4 py-1 z-50 rotate-[15deg]">
+            <span className="text-red-500 font-bold text-3xl tracking-widest uppercase drop-shadow-md">Nope</span>
+          </motion.div>
+
+          {/* Smooth black gradient overlay from bottom to middle */}
           <div
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold text-white"
-            style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)' }}
-          >
-            <Flame className="w-3 h-3 text-orange-400" />
-            {vibe}
-          </div>
-        </div>
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(10,5,12,0.95) 85%, rgba(10,5,12,1) 100%)' }}
+          />
 
-        {/* Name + info — bottom overlay */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-8">
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="flex items-center gap-1.5 mb-1">
-                <h3 className="text-white font-bold text-base leading-tight">{name}</h3>
-                <BadgeCheck className="w-4 h-4 text-blue-400 shrink-0" />
+          {/* Top Progress Bars & Badge */}
+          <div className="absolute top-0 left-0 right-0 p-5 flex flex-col gap-4 pointer-events-none">
+            <div className="flex gap-2 w-full justify-center opacity-90">
+              <div className="h-1 flex-1 bg-white rounded-full shadow-sm"></div>
+              <div className="h-1 flex-1 bg-white/30 rounded-full"></div>
+              <div className="h-1 flex-1 bg-white/30 rounded-full"></div>
+              <div className="h-1 flex-1 bg-white/30 rounded-full"></div>
+              <div className="h-1 flex-1 bg-white/30 rounded-full"></div>
+            </div>
+            
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md self-start border border-white/10">
+              <Flame className="w-3.5 h-3.5 text-white" />
+              <span className="text-white text-xs font-semibold tracking-wide">Matches Your Vibe</span>
+            </div>
+          </div>
+
+          {/* Content overlaid on bottom of image */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 pb-8 flex flex-col gap-4">
+            
+            {/* Top Row: Info & Mate Button */}
+            <div className="flex flex-row items-end justify-between gap-2">
+              {/* Name & Mutual Mates */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-white font-bold text-[28px] leading-none tracking-wide drop-shadow-md">{name}</h3>
+                  <BadgeCheck className="w-[22px] h-[22px] text-white shrink-0 drop-shadow-md" strokeWidth={2.5} />
+                </div>
+                <div className="text-[#A3A3A3] text-[15px] font-medium">
+                  {mutualMates} Mutual Mates
+                </div>
               </div>
+
+              {/* Mate Button */}
               <button
-                onClick={() => setMateAdded((p) => !p)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation() // Prevent dragging when clicking button
+                  setMateAdded((p) => !p)
+                }}
+                className="flex items-center justify-center px-6 py-2.5 rounded-full text-[15px] font-bold transition-all duration-200 hover:opacity-90 active:scale-95 text-white shadow-[0_4px_14px_rgba(236,72,153,0.4)] z-20"
                 style={
                   mateAdded
-                    ? { background: 'linear-gradient(135deg,#7C3AED,#EC4899)', color: '#fff' }
-                    : { background: 'rgba(124,58,237,0.18)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(124,58,237,0.3)' }
+                    ? { background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)', boxShadow: 'none' }
+                    : { background: 'linear-gradient(135deg, #DE3EBA, #FA4A72)' }
                 }
               >
-                <Plus className="w-3 h-3" />
-                {mateAdded ? 'Mate Added' : 'Mate'}
+                {!mateAdded ? '+ Mate' : 'Added'}
               </button>
             </div>
 
-            {/* Mutual mates */}
-            <div
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs"
-              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)' }}
-            >
-              <Users className="w-3 h-3 text-white/60" />
-              <span className="text-white/70 font-medium">{mutualMates} Mutual Mates</span>
+            {/* Bottom Row: Tags */}
+            <div className="flex flex-wrap gap-2.5 mt-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[13px] font-medium px-4 py-2 rounded-full text-[#E0E0E0] bg-[#1A141C] border border-[#2D2430]"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
+            
           </div>
-        </div>
-      </div>
-
-      {/* Card Body */}
-      <div className="px-4 pt-3 pb-4">
-        {/* Vibe Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[11px] font-medium px-2.5 py-1 rounded-full text-gray-700 bg-white/40 border border-gray-200 backdrop-blur-sm"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Action Row */}
-        <div className="flex items-center gap-2">
-          {/* Go Tonight — main CTA */}
-          <button
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #7C3AED, #EC4899)', boxShadow: '0 4px 20px rgba(124,58,237,0.35)' }}
-          >
-            <Flame className="w-4 h-4" />
-            Go Tonight
-          </button>
-
-          {/* Bookmark */}
-          <button
-            onClick={() => setBookmarked((p) => !p)}
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
-            style={
-              bookmarked
-                ? { background: 'linear-gradient(135deg, #EC4899, #F97316)', boxShadow: '0 4px 16px rgba(236,72,153,0.3)' }
-                : { background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.6)' }
-            }
-          >
-            {bookmarked
-              ? <BookmarkCheck className="w-4 h-4 text-white" />
-              : <Bookmark className="w-4 h-4 text-gray-500" />
-            }
-          </button>
         </div>
       </div>
     </motion.div>

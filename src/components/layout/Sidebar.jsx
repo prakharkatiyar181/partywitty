@@ -1,188 +1,166 @@
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
-  X,
-  Calendar,
+  ClipboardList,
   Gavel,
-  BookMarked,
+  RotateCcw,
   Search,
   MessageCircle,
   Bell,
-  Heart,
-  Gift,
-  ChevronRight,
-  Star,
-  LogOut,
-  Settings,
+  Bookmark,
+  Wallet,
+  Sidebar as SidebarIcon,
+  ArrowUpRight,
 } from 'lucide-react'
 import { useUI } from '../../context/UIContext'
-import Avatar from '../ui/Avatar'
 
 const navItems = [
-  { id: 'feed',         label: 'Feed',          icon: Star,          path: '/' },
-  { id: 'myplan',       label: 'My Plan',        icon: Calendar,      path: '/my-plan' },
+  { id: 'myplan',       label: 'My Plan',        icon: ClipboardList, path: '/my-plan' },
   { id: 'mybids',       label: 'My Bids',        icon: Gavel,         path: '/my-bids' },
-  { id: 'mybooking',    label: 'My Booking',     icon: BookMarked,    path: '/my-booking' },
+  { id: 'mybooking',    label: 'My Booking',     icon: RotateCcw,     path: '/my-booking' },
   { id: 'search',       label: 'Search',         icon: Search,        path: '/search' },
   { id: 'chatroom',     label: 'Chat Room',      icon: MessageCircle, path: '/chat' },
-  { id: 'notifications',label: 'Notifications',  icon: Bell,          path: '/notifications', badge: 3 },
-  { id: 'savelike',     label: 'Save & Like',    icon: Heart,         path: '/saved' },
-  { id: 'rewards',      label: 'Rewards',        icon: Gift,          path: '/rewards' },
+  { id: 'notifications',label: 'Notifications',  icon: Bell,          path: '/notifications' },
+  { id: 'savelike',     label: 'Save & Like',    icon: Bookmark,      path: '/saved' },
+  { id: 'rewards',      label: 'Rewards',        icon: Wallet,        path: '/rewards' },
 ]
 
 const Sidebar = () => {
-  const { sidebarOpen, closeSidebar, activeNavItem, setActiveNavItem } = useUI()
+  const { sidebarOpen, toggleSidebar, activeNavItem, setActiveNavItem } = useUI()
   const navigate = useNavigate()
 
   const handleNavClick = (item) => {
     setActiveNavItem(item.id)
     navigate(item.path)
-    closeSidebar()
+    if (window.innerWidth < 768) {
+       // if we want to auto-close on mobile
+    }
   }
 
   return (
-    <AnimatePresence>
-      {sidebarOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-            onClick={closeSidebar}
-          />
+    <motion.aside
+      initial={false}
+      animate={{ 
+        width: sidebarOpen ? 320 : 80,
+      }}
+      transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+      className="fixed top-0 left-0 h-full z-50 flex flex-col backdrop-blur-md overflow-visible"
+      style={{ backgroundColor: 'rgba(241, 241, 241, 0.28)' }}
+    >
+      {/* Header */}
+      <div className={`flex items-center pt-10 pb-8 relative ${sidebarOpen ? 'justify-between px-8' : 'justify-center px-0'}`}>
+        <div className="flex items-center overflow-hidden">
+          {sidebarOpen ? (
+            <motion.img 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              src="https://partywitty.com/static/media/logo.9231c309913633f74bb5f1ae87f70b59.svg" 
+              alt="PartyWitty Logo" 
+              className="h-8 w-auto object-contain"
+            />
+          ) : (
+            <img 
+              src="https://partywitty.com/static/media/logo2.38d9613d9216fb6dc54e0f49ef5dd585.svg" 
+              alt="PartyWitty Icon" 
+              className="h-8 w-auto object-contain"
+            />
+          )}
+        </div>
+        
+        <button
+          onClick={toggleSidebar}
+          className={`w-10 h-10 rounded-xl bg-[#D9CFF1] flex items-center justify-center hover:bg-[#CBBEE8] transition-colors shrink-0 ${
+            !sidebarOpen ? 'absolute -right-5 z-10' : ''
+          }`}
+        >
+          <SidebarIcon className="w-5 h-5 text-[#7C3AED]" />
+        </button>
+      </div>
 
-          {/* Sidebar Panel */}
-          <motion.aside
-            initial={{ x: '-100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-            className="fixed top-0 left-0 h-full w-72 z-50 flex flex-col bg-white/70 backdrop-blur-3xl"
-            style={{
-              borderRight: '1px solid rgba(0, 0, 0, 0.1)',
-            }}
+      {/* Navigation */}
+      <nav className={`flex-1 py-2 overflow-y-auto space-y-7 ${sidebarOpen ? 'px-8' : 'px-0 flex flex-col items-center'}`}>
+        {navItems.map(({ id, label, icon: Icon, path }) => (
+          <button
+            key={id}
+            onClick={() => handleNavClick({ id, path })}
+            className={`flex items-center text-[#1A1A1A] hover:text-[#7C3AED] transition-colors group ${
+              sidebarOpen ? 'w-full gap-4' : 'justify-center w-full'
+            }`}
+            title={!sidebarOpen ? label : undefined}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 pt-6 pb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-g1 flex items-center justify-center">
-                  <Star className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-gray-900 font-bold text-lg tracking-tight">PartyWitty</span>
+            <Icon className="w-7 h-7 stroke-[1.5] shrink-0" />
+            {sidebarOpen && (
+              <span className="text-[1.1rem] font-medium whitespace-nowrap">{label}</span>
+            )}
+          </button>
+        ))}
+      </nav>
+
+      {/* Footer */}
+      <div className={`mt-auto flex flex-col pb-8 pt-4 ${sidebarOpen ? 'px-6' : 'px-0 items-center'}`}>
+        
+        {/* More button */}
+        <button 
+          className={`flex items-center text-[#1A1A1A] mb-6 hover:text-[#7C3AED] transition-colors group ${
+            sidebarOpen ? 'gap-4 px-2' : 'justify-center w-full'
+          }`}
+          title={!sidebarOpen ? 'More' : undefined}
+        >
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:text-[#7C3AED] shrink-0">
+            {/* Custom staggered hamburger icon */}
+            <path d="M4 8H16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M6 14H22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M9 20H25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+          {sidebarOpen && (
+            <span className="text-[1.3rem] font-medium whitespace-nowrap tracking-tight">More</span>
+          )}
+        </button>
+
+        {/* Corporate Employee Offer (Only in open state) */}
+        {sidebarOpen && (
+          <div className="bg-[#111822] rounded-md p-3.5 mb-5 flex items-center gap-4 shadow-lg shrink-0 overflow-hidden">
+            <div className="text-[2.2rem] leading-none drop-shadow-md pb-1">👑</div>
+            <div className="flex flex-col text-left whitespace-nowrap">
+              <span className="text-[#E0E5EA] text-[0.85rem] font-medium tracking-wide">Corporate Employee Offer</span>
+              <span className="text-[#C19C45] text-[15px] font-bold mt-0.5">1 Month For ₹1</span>
+            </div>
+          </div>
+        )}
+
+        {/* Profile */}
+        <div 
+          className={`flex items-center cursor-pointer group shrink-0 ${
+            sidebarOpen ? 'gap-3 px-2' : 'justify-center relative mt-2'
+          }`}
+          onClick={() => { navigate('/profile') }}
+          title={!sidebarOpen ? 'Zeeshan Ahmad' : undefined}
+        >
+          <div className="relative">
+            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-transparent group-hover:border-[#7C3AED] transition-colors">
+              <img src="/src/assets/images/profile_2.png" alt="Zeeshan Ahmad" className="w-full h-full object-cover" />
+            </div>
+            {/* Small crown overlay for closed state */}
+            {!sidebarOpen && (
+              <div className="absolute -top-1 -left-2 w-6 h-6 rounded-full bg-[#111822] flex items-center justify-center border border-[#C19C45] shadow-sm z-10">
+                <span className="text-[10px] leading-none">👑</span>
               </div>
-              <button
-                onClick={closeSidebar}
-                className="w-8 h-8 rounded-full bg-black/[0.05] flex items-center justify-center hover:bg-black/[0.1] transition-colors"
-              >
-                <X className="w-4 h-4 text-gray-500" />
-              </button>
-            </div>
-
-            {/* Profile Card */}
-            <div
-              className="mx-4 mb-4 p-4 rounded-2xl cursor-pointer hover:bg-white/40 transition-colors"
-              style={{ background: 'rgba(124,58,237,0.05)', border: '1px solid rgba(124,58,237,0.2)' }}
-              onClick={() => { navigate('/profile'); closeSidebar() }}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <Avatar name="Zeeshan Ahmad" size="lg" colorIndex={0} verified />
-                <div className="flex-1 min-w-0">
-                  <p className="text-gray-900 font-semibold text-sm truncate">Zeeshan Ahmad</p>
-                  <p className="text-gray-500 text-xs truncate">Indus Global Pvt Ltd</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
+            )}
+          </div>
+          
+          {sidebarOpen && (
+            <>
+              <div className="flex-1 min-w-0 flex flex-col text-left overflow-hidden">
+                <p className="text-black font-semibold text-[1.1rem] truncate tracking-tight">Zeeshan Ahmad</p>
+                <p className="text-[#6B6B6B] text-[0.8rem] truncate font-medium mt-0.5">Indus Global Pvt Ltd Admin</p>
               </div>
-
-              {/* Corporate Badge */}
-              <div
-                className="w-full rounded-xl p-2.5 text-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(236,72,153,0.3))',
-                  border: '1px solid rgba(124,58,237,0.3)',
-                }}
-              >
-                <p className="text-gray-800 text-[10px] font-medium mb-0.5">Corporate Employee Offer</p>
-                <p className="text-gray-900 font-bold text-sm">
-                  1 Month for <span className="gradient-text">₹1</span>
-                </p>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="px-6 mb-2">
-              <div className="h-px bg-black/[0.1]" />
-            </div>
-
-            {/* Navigation */}
-            <nav className="flex-1 px-3 overflow-y-auto">
-              {navItems.map(({ id, label, icon: Icon, badge, path }) => {
-                const isActive = activeNavItem === id
-                return (
-                  <button
-                    key={id}
-                    onClick={() => handleNavClick({ id, path })}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-1 transition-all duration-200 group relative"
-                    style={
-                      isActive
-                        ? { background: 'linear-gradient(135deg, rgba(124,58,237,0.25), rgba(236,72,153,0.15))', border: '1px solid rgba(124,58,237,0.25)' }
-                        : { background: 'transparent', border: '1px solid transparent' }
-                    }
-                  >
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200"
-                      style={
-                        isActive
-                          ? { background: 'linear-gradient(135deg, #7C3AED, #EC4899)' }
-                          : { background: 'rgba(0,0,0,0.05)' }
-                      }
-                    >
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-500'}`} />
-                    </div>
-                    <span
-                      className={`text-sm font-medium flex-1 text-left transition-colors ${
-                        isActive ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
-                      }`}
-                    >
-                      {label}
-                    </span>
-                    {badge && (
-                      <span className="w-5 h-5 rounded-full bg-gradient-g1 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
-                        {badge}
-                      </span>
-                    )}
-                    {isActive && (
-                      <ChevronRight className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                    )}
-                  </button>
-                )
-              })}
-            </nav>
-
-            {/* Footer */}
-            <div className="px-3 pb-6 mt-2 border-t border-black/[0.1] pt-4 space-y-1">
-              <button
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-black/[0.05] transition-all duration-200"
-                onClick={() => { navigate('/settings'); closeSidebar() }}
-              >
-                <div className="w-8 h-8 rounded-lg bg-black/[0.05] flex items-center justify-center shrink-0">
-                  <Settings className="w-4 h-4" />
-                </div>
-                <span className="text-sm font-medium">Settings</span>
-              </button>
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:text-red-600 hover:bg-red-50 transition-all duration-200">
-                <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
-                  <LogOut className="w-4 h-4 text-red-500" />
-                </div>
-                <span className="text-sm font-medium">Log Out</span>
-              </button>
-            </div>
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+              <ArrowUpRight className="w-5 h-5 text-black group-hover:text-[#7C3AED] shrink-0" strokeWidth={1.5} />
+            </>
+          )}
+        </div>
+      </div>
+    </motion.aside>
   )
 }
 

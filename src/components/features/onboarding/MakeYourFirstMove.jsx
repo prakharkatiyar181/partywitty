@@ -1,94 +1,128 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ShieldCheck, Clock, ArrowRight } from 'lucide-react'
 import avatarImg from '../../../assets/images/avatar_placeholder.png'
 import BenefitsList from './BenefitsList'
 import HowItWorks from '../feed/HowItWorks'
+import VerificationModal from './VerificationModal'
+import CameraVerificationModal from './CameraVerificationModal'
+import VerificationProgressModal from './VerificationProgressModal'
 
-const MakeYourFirstMove = () => {
+const MakeYourFirstMove = ({ onHide }) => {
+  const [isIntroModalOpen, setIsIntroModalOpen] = useState(false)
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false)
+  const [isProgressModalOpen, setIsProgressModalOpen] = useState(false)
+
+  const handleStartCamera = () => {
+    setIsIntroModalOpen(false)
+    setIsCameraModalOpen(true)
+  }
+
+  const handleCameraSuccess = () => {
+    setIsCameraModalOpen(false)
+    setIsProgressModalOpen(true)
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="rounded-[28px] overflow-hidden relative glass-card-sm"
-    >
-      {/* Decorative blur orbs */}
-      <div
-        className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-20 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #7C3AED, transparent 70%)', transform: 'translate(30%, -30%)' }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-32 h-32 rounded-full opacity-15 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #EC4899, transparent 70%)', transform: 'translate(-30%, 30%)' }}
-      />
-
-      <div className="relative z-10 p-6">
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-6">
-          {/* Avatar with gradient ring */}
-          <div className="shrink-0">
-            <div
-              className="p-0.5 rounded-full"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #EC4899)' }}
-            >
-              <div className="w-14 h-14 rounded-full overflow-hidden bg-black">
-                <img src={avatarImg} alt="Profile" className="w-full h-full object-cover" />
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="rounded-[20px] overflow-hidden relative w-full backdrop-blur-md"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+        }}
+      >
+        <div className="relative z-10 p-7 md:p-8">
+          
+          {/* Header Section */}
+          <div className="flex flex-col items-center text-center gap-4 mb-8">
+            {/* Profile Image with blue/purple gradient border */}
+            <div className="w-[80px] h-[80px] p-[2px] mb-2">
+              <div className="w-full h-full overflow-hidden">
+                <img src={avatarImg} alt="Profile" className="w-full h-full object-cover scale-[1.25]" />
               </div>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <h2 className="text-[#1A1A1A] font-bold text-[22px] leading-tight mb-2 tracking-tight">
+                Make Your First Move
+              </h2>
+              <p className="text-[#5E5E5E] text-[15px] font-medium leading-relaxed max-w-[280px]">
+                Verify your profile to start sending invites and offering drinks.
+              </p>
             </div>
           </div>
 
-          <div className="flex-1 min-w-0">
-            <h2 className="text-gray-900 font-bold text-xl leading-tight mb-1">
-              Make Your First Move
-            </h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Verify your profile to start sending invites and offering drinks.
+          {/* Separator */}
+          <div className="h-[1px] w-full bg-[#D1CDCF] mb-8" />
+
+          {/* How It Works section */}
+          <div className="mb-8">
+            <HowItWorks />
+          </div>
+
+          {/* Separator */}
+          <div className="h-[1px] w-full bg-[#D1CDCF] mb-8" />
+
+          {/* Benefits */}
+          <div className="mb-8">
+            <BenefitsList />
+          </div>
+
+          {/* Separator */}
+          <div className="h-[1px] w-full bg-[#D1CDCF] mb-8" />
+
+          {/* CTA */}
+          <div className="flex flex-col items-center gap-4">
+            <button
+              onClick={() => setIsIntroModalOpen(true)}
+              className="w-full flex items-center justify-center py-4 rounded-full font-bold text-[17px] text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98] shadow-md"
+              style={{
+                background: 'linear-gradient(135deg, #DE3EBA, #FA4A72)',
+              }}
+            >
+              Get Verified
+            </button>
+
+            <p className="text-[#4A4A4A] font-medium text-[14px]">
+              Takes less than 60 seconds
             </p>
+
+            <button 
+              onClick={() => {
+                if (onHide) onHide()
+              }}
+              className="text-[#4A4A4A] font-semibold text-[14px] hover:text-[#1A1A1A] transition-colors mt-2 underline underline-offset-4 decoration-[#8A8A8A]"
+            >
+              Maybe later
+            </button>
           </div>
         </div>
+      </motion.div>
 
-        {/* Divider */}
-        <div className="h-px mb-6 bg-gradient-to-r from-gray-200 to-transparent" />
+      {/* Intro Modal */}
+      <VerificationModal 
+        isOpen={isIntroModalOpen} 
+        onClose={() => setIsIntroModalOpen(false)} 
+        onStartVerification={handleStartCamera} 
+      />
 
-        {/* How It Works section */}
-        <div className="mb-6">
-          <HowItWorks />
-        </div>
+      {/* Camera Capture Modal */}
+      <CameraVerificationModal 
+        isOpen={isCameraModalOpen} 
+        onClose={() => setIsCameraModalOpen(false)} 
+        onCaptureSuccess={handleCameraSuccess}
+      />
 
-        {/* Divider */}
-        <div className="h-px mb-6 bg-gradient-to-r from-gray-200 to-transparent" />
-
-        {/* Benefits */}
-        <div className="mb-6">
-          <h3 className="text-gray-800 font-semibold text-sm mb-3">Why get verified?</h3>
-          <BenefitsList />
-        </div>
-
-        {/* CTA */}
-        <div className="flex flex-col items-center gap-3 pt-2">
-          <button
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full font-bold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-            style={{
-              background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
-              boxShadow: '0 8px 32px rgba(124,58,237,0.45)',
-            }}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            Get Verified
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <div className="flex items-center gap-1.5 text-gray-500 text-xs">
-            <Clock className="w-3 h-3" />
-            <span>Takes less than 60 seconds</span>
-          </div>
-
-          <button className="text-gray-400 text-xs hover:text-gray-600 transition-colors underline underline-offset-2">
-            Maybe later
-          </button>
-        </div>
-      </div>
-    </motion.div>
+      {/* Progress / Success Modal */}
+      <VerificationProgressModal
+        isOpen={isProgressModalOpen}
+        onClose={() => setIsProgressModalOpen(false)}
+      />
+    </>
   )
 }
 

@@ -1,23 +1,11 @@
 import { motion } from 'framer-motion'
-import { Zap, TrendingUp, Lock, Shield } from 'lucide-react'
+import GreenTick from '../../ui/GreenTick'
 
 const benefits = [
-  {
-    icon: <Zap className="w-3.5 h-3.5 text-white" />,
-    text: 'Get noticed faster',
-  },
-  {
-    icon: <TrendingUp className="w-3.5 h-3.5 text-white" />,
-    text: 'Higher chances your invite gets accepted',
-  },
-  {
-    icon: <Lock className="w-3.5 h-3.5 text-white" />,
-    text: 'Unlock drink invites & premium interactions',
-  },
-  {
-    icon: <Shield className="w-3.5 h-3.5 text-white" />,
-    text: 'Build trust with every profile visit',
-  },
+  'Get noticed faster',
+  'Higher chances your invite gets accepted',
+  'Unlock drink invites & premium interactions',
+  'Build trust with every profile visit',
 ]
 
 const listVariants = {
@@ -33,21 +21,16 @@ const itemVariants = {
 const BenefitsList = () => {
   return (
     <motion.ul
-      className="space-y-3"
+      className="space-y-4"
       variants={listVariants}
       initial="hidden"
       animate="visible"
     >
-      {benefits.map((benefit, i) => (
-        <motion.li key={i} variants={itemVariants} className="flex items-start gap-3">
-          {/* Gradient dot container */}
-          <div
-            className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-            style={{ background: 'linear-gradient(135deg, #7C3AED, #EC4899)' }}
-          >
-            {benefit.icon}
-          </div>
-          <span className="text-gray-700 text-sm leading-relaxed">{benefit.text}</span>
+      {benefits.map((text, i) => (
+        <motion.li key={i} variants={itemVariants} className="flex items-center gap-3">
+          {/* Check icon container */}
+          <GreenTick className="w-[20px] h-[20px]" iconSize={12} />
+          <span className="text-[#4A4A4A] font-medium text-[14px] leading-relaxed">{text}</span>
         </motion.li>
       ))}
     </motion.ul>
