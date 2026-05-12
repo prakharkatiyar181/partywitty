@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Heart, Flame } from 'lucide-react'
 import DiscoverCard from './DiscoverCard'
 import profileZoe from '../../../assets/images/profile_zoe.png'
-import profileAisha from '../../../assets/images/image.png'
+import profileAisha from '../../../assets/images/Image.png'
 
 const initialProfiles = [
   {
