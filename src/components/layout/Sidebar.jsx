@@ -60,10 +60,9 @@ const Sidebar = () => {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-            className="fixed top-0 left-0 h-full w-72 z-50 flex flex-col"
+            className="fixed top-0 left-0 h-full w-72 z-50 flex flex-col bg-white/70 backdrop-blur-3xl"
             style={{
-              background: 'linear-gradient(180deg, #0f0a1e 0%, #0a0a0a 100%)',
-              borderRight: '1px solid rgba(255,255,255,0.08)',
+              borderRight: '1px solid rgba(0, 0, 0, 0.1)',
             }}
           >
             {/* Header */}
@@ -72,29 +71,29 @@ const Sidebar = () => {
                 <div className="w-8 h-8 rounded-full bg-gradient-g1 flex items-center justify-center">
                   <Star className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-white font-bold text-lg tracking-tight">PartyWitty</span>
+                <span className="text-gray-900 font-bold text-lg tracking-tight">PartyWitty</span>
               </div>
               <button
                 onClick={closeSidebar}
-                className="w-8 h-8 rounded-full bg-white/[0.08] flex items-center justify-center hover:bg-white/[0.14] transition-colors"
+                className="w-8 h-8 rounded-full bg-black/[0.05] flex items-center justify-center hover:bg-black/[0.1] transition-colors"
               >
-                <X className="w-4 h-4 text-white/70" />
+                <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>
 
             {/* Profile Card */}
             <div
-              className="mx-4 mb-4 p-4 rounded-2xl cursor-pointer hover:opacity-90 transition-opacity"
-              style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)' }}
+              className="mx-4 mb-4 p-4 rounded-2xl cursor-pointer hover:bg-white/40 transition-colors"
+              style={{ background: 'rgba(124,58,237,0.05)', border: '1px solid rgba(124,58,237,0.2)' }}
               onClick={() => { navigate('/profile'); closeSidebar() }}
             >
               <div className="flex items-center gap-3 mb-3">
                 <Avatar name="Zeeshan Ahmad" size="lg" colorIndex={0} verified />
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-semibold text-sm truncate">Zeeshan Ahmad</p>
-                  <p className="text-white/50 text-xs truncate">Indus Global Pvt Ltd</p>
+                  <p className="text-gray-900 font-semibold text-sm truncate">Zeeshan Ahmad</p>
+                  <p className="text-gray-500 text-xs truncate">Indus Global Pvt Ltd</p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-white/30 shrink-0" />
+                <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
               </div>
 
               {/* Corporate Badge */}
@@ -105,8 +104,8 @@ const Sidebar = () => {
                   border: '1px solid rgba(124,58,237,0.3)',
                 }}
               >
-                <p className="text-white/70 text-[10px] font-medium mb-0.5">Corporate Employee Offer</p>
-                <p className="text-white font-bold text-sm">
+                <p className="text-gray-800 text-[10px] font-medium mb-0.5">Corporate Employee Offer</p>
+                <p className="text-gray-900 font-bold text-sm">
                   1 Month for <span className="gradient-text">₹1</span>
                 </p>
               </div>
@@ -114,7 +113,7 @@ const Sidebar = () => {
 
             {/* Divider */}
             <div className="px-6 mb-2">
-              <div className="h-px bg-white/[0.08]" />
+              <div className="h-px bg-black/[0.1]" />
             </div>
 
             {/* Navigation */}
@@ -137,14 +136,14 @@ const Sidebar = () => {
                       style={
                         isActive
                           ? { background: 'linear-gradient(135deg, #7C3AED, #EC4899)' }
-                          : { background: 'rgba(255,255,255,0.06)' }
+                          : { background: 'rgba(0,0,0,0.05)' }
                       }
                     >
-                      <Icon className="w-4 h-4 text-white" />
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-500'}`} />
                     </div>
                     <span
                       className={`text-sm font-medium flex-1 text-left transition-colors ${
-                        isActive ? 'text-white' : 'text-white/60 group-hover:text-white/90'
+                        isActive ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
                       }`}
                     >
                       {label}
@@ -155,7 +154,7 @@ const Sidebar = () => {
                       </span>
                     )}
                     {isActive && (
-                      <ChevronRight className="w-3.5 h-3.5 text-white/50 shrink-0" />
+                      <ChevronRight className="w-3.5 h-3.5 text-gray-400 shrink-0" />
                     )}
                   </button>
                 )
@@ -163,19 +162,19 @@ const Sidebar = () => {
             </nav>
 
             {/* Footer */}
-            <div className="px-3 pb-6 mt-2 border-t border-white/[0.06] pt-4 space-y-1">
+            <div className="px-3 pb-6 mt-2 border-t border-black/[0.1] pt-4 space-y-1">
               <button
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:text-white/80 hover:bg-white/[0.06] transition-all duration-200"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-black/[0.05] transition-all duration-200"
                 onClick={() => { navigate('/settings'); closeSidebar() }}
               >
-                <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-black/[0.05] flex items-center justify-center shrink-0">
                   <Settings className="w-4 h-4" />
                 </div>
                 <span className="text-sm font-medium">Settings</span>
               </button>
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-500/[0.08] transition-all duration-200">
-                <div className="w-8 h-8 rounded-lg bg-red-500/[0.1] flex items-center justify-center shrink-0">
-                  <LogOut className="w-4 h-4" />
+              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:text-red-600 hover:bg-red-50 transition-all duration-200">
+                <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
+                  <LogOut className="w-4 h-4 text-red-500" />
                 </div>
                 <span className="text-sm font-medium">Log Out</span>
               </button>

@@ -25,12 +25,7 @@ const DiscoverCard = ({
       initial={{ opacity: 0, scale: 0.96, y: 12 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.45, delay, ease: 'easeOut' }}
-      className="relative rounded-[28px] overflow-hidden w-full"
-      style={{
-        background: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.09)',
-        boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
-      }}
+      className="relative rounded-[28px] overflow-hidden w-full glass-card-sm"
     >
       {/* Profile Image */}
       <div className="relative h-52 overflow-hidden">
@@ -102,8 +97,7 @@ const DiscoverCard = ({
           {tags.map((tag) => (
             <span
               key={tag}
-              className="text-[11px] font-medium px-2.5 py-1 rounded-full text-white/65"
-              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="text-[11px] font-medium px-2.5 py-1 rounded-full text-gray-700 bg-white/40 border border-gray-200 backdrop-blur-sm"
             >
               {tag}
             </span>
@@ -127,13 +121,13 @@ const DiscoverCard = ({
             className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
             style={
               bookmarked
-                ? { background: 'linear-gradient(135deg, #EC4899, #F97316)', boxShadow: '0 4px 16px rgba(236,72,153,0.4)' }
-                : { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }
+                ? { background: 'linear-gradient(135deg, #EC4899, #F97316)', boxShadow: '0 4px 16px rgba(236,72,153,0.3)' }
+                : { background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.6)' }
             }
           >
             {bookmarked
               ? <BookmarkCheck className="w-4 h-4 text-white" />
-              : <Bookmark className="w-4 h-4 text-white/60" />
+              : <Bookmark className="w-4 h-4 text-gray-500" />
             }
           </button>
         </div>

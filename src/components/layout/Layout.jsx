@@ -8,25 +8,25 @@ const Layout = ({ children }) => {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen relative" style={{ background: 'linear-gradient(180deg, #0f0a1e 0%, #0D0D0D 40%)' }}>
+    <div className="min-h-screen relative" style={{ background: 'transparent' }}>
       {/* Top Navigation Bar */}
       <header
         className="fixed top-0 left-0 right-0 z-30 px-4 py-3 flex items-center justify-between"
         style={{
-          background: 'rgba(13,13,13,0.8)',
+          background: 'rgba(255, 255, 255, 0.4)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.6)',
         }}
       >
         {/* Left: Hamburger + Logo */}
         <div className="flex items-center gap-3">
           <button
             onClick={toggleSidebar}
-            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/[0.1]"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/60"
+            style={{ background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.6)' }}
             aria-label="Open menu"
           >
-            <Menu className="w-4 h-4 text-white" />
+            <Menu className="w-4 h-4 text-gray-700" />
           </button>
           <button
             onClick={() => navigate('/')}
@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
             <div className="w-6 h-6 rounded-full bg-gradient-g1 flex items-center justify-center">
               <span className="text-white text-xs font-bold">P</span>
             </div>
-            <span className="text-white font-bold text-base tracking-tight hidden sm:block">PartyWitty</span>
+            <span className="text-gray-900 font-bold text-base tracking-tight hidden sm:block">PartyWitty</span>
           </button>
         </div>
 
@@ -43,20 +43,20 @@ const Layout = ({ children }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate('/search')}
-            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/[0.1]"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/60"
+            style={{ background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.6)' }}
             aria-label="Search"
           >
-            <Search className="w-4 h-4 text-white/70" />
+            <Search className="w-4 h-4 text-gray-600" />
           </button>
           <button
             onClick={() => navigate('/notifications')}
-            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/[0.1] relative"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/60 relative"
+            style={{ background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.6)' }}
             aria-label="Notifications"
           >
-            <Bell className="w-4 h-4 text-white/70" />
-            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-gradient-g1 rounded-full text-[8px] font-bold text-white flex items-center justify-center">
+            <Bell className="w-4 h-4 text-gray-600" />
+            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-gradient-g1 rounded-full text-[8px] font-bold text-white flex items-center justify-center shadow-md">
               3
             </span>
           </button>

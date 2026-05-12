@@ -10,12 +10,7 @@ const MakeYourFirstMove = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="rounded-[28px] overflow-hidden relative"
-      style={{
-        background: 'linear-gradient(160deg, rgba(124,58,237,0.15) 0%, rgba(236,72,153,0.08) 50%, rgba(15,10,30,0.95) 100%)',
-        border: '1px solid rgba(124,58,237,0.2)',
-        boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
-      }}
+      className="rounded-[28px] overflow-hidden relative glass-card-sm"
     >
       {/* Decorative blur orbs */}
       <div
@@ -43,17 +38,17 @@ const MakeYourFirstMove = () => {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h2 className="text-white font-bold text-xl leading-tight mb-1">
+            <h2 className="text-gray-900 font-bold text-xl leading-tight mb-1">
               Make Your First Move
             </h2>
-            <p className="text-white/55 text-sm leading-relaxed">
+            <p className="text-gray-600 text-sm leading-relaxed">
               Verify your profile to start sending invites and offering drinks.
             </p>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="h-px mb-6" style={{ background: 'linear-gradient(90deg, rgba(124,58,237,0.4), transparent)' }} />
+        <div className="h-px mb-6 bg-gradient-to-r from-gray-200 to-transparent" />
 
         {/* How It Works section */}
         <div className="mb-6">
@@ -61,11 +56,11 @@ const MakeYourFirstMove = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px mb-6" style={{ background: 'linear-gradient(90deg, rgba(236,72,153,0.3), transparent)' }} />
+        <div className="h-px mb-6 bg-gradient-to-r from-gray-200 to-transparent" />
 
         {/* Benefits */}
         <div className="mb-6">
-          <h3 className="text-white/80 font-semibold text-sm mb-3">Why get verified?</h3>
+          <h3 className="text-gray-800 font-semibold text-sm mb-3">Why get verified?</h3>
           <BenefitsList />
         </div>
 
@@ -83,12 +78,12 @@ const MakeYourFirstMove = () => {
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          <div className="flex items-center gap-1.5 text-white/45 text-xs">
+          <div className="flex items-center gap-1.5 text-gray-500 text-xs">
             <Clock className="w-3 h-3" />
             <span>Takes less than 60 seconds</span>
           </div>
 
-          <button className="text-white/40 text-xs hover:text-white/60 transition-colors underline underline-offset-2">
+          <button className="text-gray-400 text-xs hover:text-gray-600 transition-colors underline underline-offset-2">
             Maybe later
           </button>
         </div>

@@ -4,7 +4,7 @@ import { Eye, Flame } from 'lucide-react'
 const steps = [
   {
     number: '1',
-    icon: <Eye className="w-4 h-4 text-white/60" />,
+    icon: <Eye className="w-4 h-4 text-gray-500" />,
     title: 'Spot Your Person',
     description: "Pick someone you'd genuinely enjoy going out with.",
     color: 'from-purple-600 to-blue-500',
@@ -42,8 +42,8 @@ const HowItWorks = () => {
     <div className="space-y-3">
       {/* Section title */}
       <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-white font-bold text-lg">How It Works</h2>
-        <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, rgba(124,58,237,0.4), transparent)' }} />
+        <h2 className="text-gray-900 font-bold text-lg">How It Works</h2>
+        <div className="flex-1 h-px bg-gradient-to-r from-purple-200 to-transparent" />
       </div>
 
       <motion.div
@@ -56,10 +56,10 @@ const HowItWorks = () => {
           <motion.div
             key={step.number}
             variants={cardVariants}
-            className="flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 hover:bg-white/[0.06] group cursor-default"
+            className="flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 hover:bg-white/50 group cursor-default"
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.07)',
+              background: 'rgba(255, 255, 255, 0.4)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
             }}
           >
             {/* Step number */}
@@ -70,19 +70,19 @@ const HowItWorks = () => {
                 {step.number}
               </div>
               {index < steps.length - 1 && (
-                <div className="w-px flex-1 h-6" style={{ background: 'rgba(255,255,255,0.1)' }} />
+                <div className="w-px flex-1 h-6" style={{ background: 'rgba(0, 0, 0, 0.1)' }} />
               )}
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0 pt-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-white font-semibold text-sm group-hover:text-white transition-colors">
+                <h3 className="text-gray-900 font-semibold text-sm group-hover:text-black transition-colors">
                   {step.title}
                 </h3>
                 <span>{step.icon}</span>
               </div>
-              <p className="text-white/50 text-xs leading-relaxed">{step.description}</p>
+              <p className="text-gray-600 text-xs leading-relaxed">{step.description}</p>
             </div>
           </motion.div>
         ))}

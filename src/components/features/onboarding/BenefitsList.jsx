@@ -47,7 +47,7 @@ const BenefitsList = () => {
           >
             {benefit.icon}
           </div>
-          <span className="text-white/75 text-sm leading-relaxed">{benefit.text}</span>
+          <span className="text-gray-700 text-sm leading-relaxed">{benefit.text}</span>
         </motion.li>
       ))}
     </motion.ul>
